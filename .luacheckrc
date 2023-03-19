@@ -651,5 +651,7 @@ stds.status_effects = {
 	},
 	read_globals = {
 		"fmod",
+		"futil",
+		"persistent_monoids",
 	},
 }
