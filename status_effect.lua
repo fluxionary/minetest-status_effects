@@ -53,12 +53,12 @@ function StatusEffect:_set_remaining(player, key, value)
 	self:_set_remainings(meta, remainings)
 end
 
-function StatusEffect:add(player, value, key)
+function StatusEffect:add(player, key, value)
 	self:_set_remaining(player, key, nil)
 	return self._monoid:add_change(player, value, key)
 end
 
-function StatusEffect:add_timed(player, value, time, key)
+function StatusEffect:add_timed(player, key, value, time)
 	self:_set_remaining(player, key, time)
 	return self._monoid:add_change(player, value, key)
 end
