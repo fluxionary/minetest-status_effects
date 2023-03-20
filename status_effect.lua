@@ -3,6 +3,8 @@ local f = string.format
 local StatusEffect = futil.class1()
 
 function StatusEffect:_init(name, def)
+	assert(def.fold)
+
 	self._name = name
 	futil.table.set_all(self, def)
 
