@@ -61,7 +61,8 @@ minetest.register_globalstep(function(dtime)
 				else
 					for i = 1, #players do
 						local player = players[i]
-						effect:on_step(player, effect:value(player), dtime)
+						local value = effect:value(player)
+						effect:on_step(player, value, dtime)
 					end
 					if effect.step_catchup then
 						while elapsed > effect.step_every do

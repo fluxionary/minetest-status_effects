@@ -9,7 +9,9 @@ function StatusEffect:_init(name, def)
 	futil.table.set_all(self, def)
 
 	local monoid_def = {
-		fold = def.fold,
+		fold = function(t)
+			return def.fold(self, t)
+		end,
 	}
 
 	self._registered_on_changes = { def.apply }
