@@ -5,7 +5,8 @@ local StatusEffect = futil.class1()
 function StatusEffect:_init(name, def)
 	assert(def.fold)
 
-	self._name = name
+	self.name = name
+	self.description = def.description or name
 	futil.table.set_all(self, def)
 
 	local monoid_def = {
@@ -28,12 +29,12 @@ function StatusEffect:register_on_change(callback)
 	table.insert(self._registered_on_changes, callback)
 end
 
-function StatusEffect:value(player)
-	return self._monoid:value(player)
+function StatusEffect:value(player, key)
+	return self._monoid:value(player, key)
 end
 
 function StatusEffect:_remainings_key()
-	return f("status_effect:%s:remainings", self._name)
+	return f("status_effect:%s:remainings", self.name)
 end
 
 function StatusEffect:_get_remainings(meta)
@@ -50,10 +51,10 @@ function StatusEffect:_set_remainings(meta, remainings)
 	end
 end
 
-function StatusEffect:_set_remaining(player, key, value)
+function StatusEffect:_set_remaining(player, key, remaining_time)
 	local meta = player:get_meta()
 	local remainings = self:_get_remainings(meta)
-	remainings[key] = value
+	remainings[key] = remaining_time
 	self:_set_remainings(meta, remainings)
 end
 
@@ -65,6 +66,26 @@ end
 function StatusEffect:add_timed(player, key, value, time)
 	self:_set_remaining(player, key, time)
 	return self._monoid:add_change(player, value, key)
+end
+
+function StatusEffect:remaining_time(player, key)
+	local meta = player:get_meta()
+	local remainings = self:_get_remainings(meta)
+	if key then
+		return (remainings[key] or tonumber("inf")), self:value(player, key)
+	else
+		local current_value = self:value()
+		local values = self._monoid:values()
+
+		for id, remaining in futil.table.pairs_by_value(remainings) do
+			values[id] = nil
+			if self:fold(values) ~= current_value then
+				return remaining, current_value
+			end
+		end
+
+		return tonumber("inf"), current_value
+	end
 end
 
 --[[
