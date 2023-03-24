@@ -5,22 +5,22 @@ local StatusEffect = futil.class1()
 function StatusEffect:_init(name, def)
 	assert(def.fold)
 
+	futil.table.set_all(self, def)
+
 	self.name = name
 	self.description = def.description or name
-	futil.table.set_all(self, def)
+	self._registered_on_changes = { def.apply }
 
 	local monoid_def = {
 		fold = function(t)
 			return def.fold(self, t)
 		end,
+		on_change = function(old_total, new_total, player)
+			for _, callback in ipairs(self._registered_on_changes) do
+				callback(self, player, new_total, old_total)
+			end
+		end,
 	}
-
-	self._registered_on_changes = { def.apply }
-	function monoid_def.on_change(old_total, new_total, player)
-		for _, callback in ipairs(self._registered_on_changes) do
-			callback(self, player, new_total, old_total)
-		end
-	end
 
 	self._monoid = persistent_monoids.make_monoid("status_effects:" .. name, monoid_def)
 end
