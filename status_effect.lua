@@ -39,7 +39,7 @@ end
 
 function StatusEffect:_get_remainings(meta)
 	local key = self:_remainings_key()
-	return minetest.deserialize(meta:get(key)) or {}
+	return minetest.deserialize(meta:get_string(key)) or {}
 end
 
 function StatusEffect:_set_remainings(meta, remainings)
