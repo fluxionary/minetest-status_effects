@@ -1,9 +1,9 @@
 # status_effects
 
-api for defining player status effects such as "tired", "poisoned", or "lycanthropy". effects can be applied
-from multiple sources
+an api for defining player status effects such as "tired", "poisoned", or "lycanthropy". effects can be applied
+from multiple sources. note that this is just an API; actual effects are *not* supplied by this mod.
 
-## creating an effect
+### creating an effect
 
 ```lua
 local S = minetest.get_translator()
@@ -17,7 +17,6 @@ status_effects.register_effect("my_effect", {
 	fold = function(self, values_by_key)
         -- required. defines how to behave when an effect is coming from zero or more sources.
         -- if values_by_key is empty, should return the default state.
-        -- multiple common value combinators are supplied, see that section below
         return std_effects.util.not_blocked(values_by_key)
     end,
     apply = function(self, player, value, old_value)
@@ -33,7 +32,11 @@ status_effects.register_effect("my_effect", {
 
 	hud_line = std_effects.util.numeric_hud_line, -- optional - if specified, what is shown when the effects hud is enabled.
 })
+```
 
+### using an effect
+
+```lua
 local my_effect = status_effects.get_effect("my_effect")
 my_effect:register_on_change(function(self, player, new_total, old_total)
     print("value is now " .. tostring(new_total))
@@ -43,7 +46,7 @@ local player = minetest.get_player_by_name("flux")
 
 print(my_effect:value(player)) -- get the current value
 my_effect:add(player, "blahblah_key", true) -- adds a permanent value that enables the effect
-my_effect:add_timed(player, "another_key", false, 60) -- disables the effect for 60 seconds
+my_effect:add_timed(player, "another_key", false, 60) -- *disables* the effect for 60 seconds
 my_effect:remaining_time(player)  -- returns the time before the value will change, and current value
 my_effect:clear(player, "blahblah_key") -- clears the value of "blahblah_key". can also be used to clear timed keys.
 my_effect:clear(player) -- clears *all* keys, resetting to the default value
