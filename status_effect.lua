@@ -64,8 +64,13 @@ function StatusEffect:add(player, key, value)
 end
 
 function StatusEffect:add_timed(player, key, value, time)
-	self:_set_remaining(player, key, time)
-	return self._monoid:add_change(player, value, key)
+	if time > 0 then
+		self:_set_remaining(player, key, time)
+		return self._monoid:add_change(player, value, key)
+	else
+		self:_set_remaining(player, key, nil)
+		self._monoid:del_change(player, key)
+	end
 end
 
 function StatusEffect:remaining_time(player, key)
