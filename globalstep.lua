@@ -22,14 +22,14 @@ local function process_step_every_catch_up(players, effect, now, elapsed)
 		local value = effect:value(player)
 		if effect.on_step then
 			effect:on_step(player, value, effect.step_every, now)
-		end
 
-		for _ = 1, math.floor(elapsed / effect.step_every) do
-			update_remainings(player, meta, effect, remainings, effect.step_every)
+			for _ = 1, math.floor(elapsed / effect.step_every) do
+				update_remainings(player, meta, effect, remainings, effect.step_every)
 
-			if effect.on_step then
 				effect:on_step(player, effect:value(player), effect.step_every, now)
 			end
+		else
+			update_remainings(player, meta, effect, remainings, math.floor(elapsed / effect.step_every))
 		end
 	end
 
