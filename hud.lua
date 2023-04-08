@@ -7,7 +7,7 @@ status_effects.effects_hud = futil.define_hud("status_effects:effects", {
 		local lines = {}
 		for _, effect in pairs(status_effects.registered_effects) do
 			if effect.hud_line then
-				lines[#lines + 1] = effect.hud_line(player)
+				lines[#lines + 1] = effect:hud_line(player)
 			end
 		end
 
