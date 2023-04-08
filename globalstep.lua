@@ -20,12 +20,16 @@ local function process_step_every_catch_up(players, effect, now, elapsed)
 		local remainings = effect:_get_remainings(meta)
 
 		local value = effect:value(player)
-		effect:on_step(player, value, effect.step_every, now)
+		if effect.on_step then
+			effect:on_step(player, value, effect.step_every, now)
+		end
 
 		for _ = 1, math.floor(elapsed / effect.step_every) do
 			update_remainings(player, meta, effect, remainings, effect.step_every)
 
-			effect:on_step(player, effect:value(player), effect.step_every, now)
+			if effect.on_step then
+				effect:on_step(player, effect:value(player), effect.step_every, now)
+			end
 		end
 	end
 
@@ -39,7 +43,9 @@ local function process_step(players, effect, now, elapsed)
 		local remainings = effect:_get_remainings(meta)
 
 		local value = effect:value(player)
-		effect:on_step(player, value, elapsed, now)
+		if effect.on_step then
+			effect:on_step(player, value, elapsed, now)
+		end
 
 		update_remainings(player, meta, effect, remainings, elapsed)
 	end
@@ -50,22 +56,20 @@ minetest.register_globalstep(function(dtime)
 	local now = minetest.get_us_time()
 
 	for effect_name, effect in pairs(status_effects.registered_effects) do
-		if effect.on_step then
-			if effect.step_every then
-				local elapsed = (last_step_by_effect_name[effect_name] or 0) + dtime
-				if elapsed >= effect.step_every then
-					if effect.step_catchup then
-						elapsed = process_step_every_catch_up(players, effect, now, elapsed)
-					else
-						process_step(players, effect, now, elapsed)
-						elapsed = 0
-					end
+		if effect.step_every then
+			local elapsed = (last_step_by_effect_name[effect_name] or 0) + dtime
+			if elapsed >= effect.step_every then
+				if effect.step_catchup then
+					elapsed = process_step_every_catch_up(players, effect, now, elapsed)
+				else
+					process_step(players, effect, now, elapsed)
+					elapsed = 0
 				end
-
-				last_step_by_effect_name[effect_name] = elapsed
-			else
-				process_step(players, effect, now, dtime)
 			end
+
+			last_step_by_effect_name[effect_name] = elapsed
+		else
+			process_step(players, effect, now, dtime)
 		end
 	end
 end)
