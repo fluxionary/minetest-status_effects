@@ -79,8 +79,8 @@ function StatusEffect:remaining_time(player, key)
 	if key then
 		return (remainings[key] or tonumber("inf")), self:value(player, key)
 	else
-		local current_value = self:value()
-		local values = self._monoid:values()
+		local current_value = self:value(player)
+		local values = table.copy(self._monoid:values(player))
 
 		for id, remaining in futil.table.pairs_by_value(remainings) do
 			values[id] = nil
