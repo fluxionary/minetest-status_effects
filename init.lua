@@ -10,3 +10,6 @@ status_effects.dofile("api")
 status_effects.dofile("callbacks")
 status_effects.dofile("globalstep")
 status_effects.dofile("hud")
+
+status_effects.dofile("folds")
+status_effects.dofile("hud_lines")

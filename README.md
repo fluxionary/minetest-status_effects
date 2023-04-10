@@ -17,7 +17,7 @@ status_effects.register_effect("my_effect", {
 	fold = function(self, values_by_key)
         -- required. defines how to behave when an effect is coming from zero or more sources.
         -- if values_by_key is empty, should return the default state.
-        return std_effects.util.not_blocked(values_by_key)
+        return status_effects.fold.not_blocked(values_by_key)
     end,
     apply = function(self, player, value, old_value)
         -- optional. how to "apply" the effect when the value changes.
@@ -30,7 +30,7 @@ status_effects.register_effect("my_effect", {
                            -- something every second, e.g. poison.
 	on_step = function(self, player, value, elapsed, now) end,
 
-	hud_line = std_effects.util.numeric_hud_line, -- optional - if specified, what is shown when the effects hud is enabled.
+	hud_line = status_effects.hud_line.numeric, -- optional - if specified, what is shown when the effects hud is enabled.
 })
 ```
 
