@@ -1,7 +1,7 @@
 status_effects.registered_effects = {}
 
 function status_effects.get_effect(name)
-	return status_effects.registered_effects(name)
+	return status_effects.registered_effects[name]
 end
 
 function status_effects.register_effect(name, def)
