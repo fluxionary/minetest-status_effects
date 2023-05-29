@@ -16,7 +16,7 @@ function status_effects.hud_line.boolean(self, player)
 	if remaining == inf then
 		return S("@1", self.description)
 	else
-		return S("@1 (@3s)", self.description, f("%.1f", remaining))
+		return S("@1 (@2s)", self.description, f("%.1f", remaining))
 	end
 end
 
