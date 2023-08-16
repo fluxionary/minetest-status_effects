@@ -67,3 +67,24 @@ my_effect:register_on_change(function(self, player, new_value, old_value)
     -- called when the value of the effect changes.
 end)
 ```
+
+### provided "fold" methods
+
+* `status_effects.fold.not_blocked(values_by_key)`
+
+  boolean. defaults to `false`. if there is at least one value of the effect, and all values are `true`, returns `true`.
+  otherwise, returns `"blocked"`. this is useful for creating an effect like "builders' flight", which may have
+  a very long active duration, but which is disabled when the affected player is outside their own protection areas.
+
+* `status_effects.fold.any(values_by_key)`
+
+  boolean. defaults to `false`. returns true if any value is true.
+
+* `status_effects.fold.sum(values_by_key, default)`
+
+  numeric. if default is not supplied, will default to `0`. returns the sum of the values plus the default.
+
+* `status_effects.fold.max(values_by_key, default)`
+
+  numeric. if a default is supplied, returns the maximum from the supplied values *and* the default.
+  if a default is *not* supplied, returns `nil` if there are no values, otherwise the maximum from amongst the values.

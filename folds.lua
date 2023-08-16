@@ -32,7 +32,7 @@ end
 function status_effects.fold.max(t, default)
 	local max = default
 	for _, value in pairs(t) do
-		if value > max then
+		if (not max) or value > max then
 			max = value
 		end
 	end
