@@ -70,6 +70,8 @@ end)
 
 ### provided "fold" methods
 
+for more info, see https://github.com/minetest-mods/player_monoids/blob/master/API.md#combine-and-fold
+
 * `status_effects.fold.not_blocked(values_by_key)`
 
   boolean. defaults to `false`. if there is at least one value of the effect, and all values are `true`, returns `true`.
