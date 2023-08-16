@@ -8,6 +8,7 @@ local my_effect = status_effects.register_effect("my_effect", {
 	fold = function(self, values_by_key)
         -- required. defines how to behave when an effect is coming from zero or more sources.
         -- if values_by_key is empty, should return the default state.
+        -- see the "folds" section below for some provided fold methods
         return status_effects.fold.not_blocked(values_by_key)
     end,
     apply = function(self, player, value, old_value)
@@ -90,3 +91,17 @@ for more info, see https://github.com/minetest-mods/player_monoids/blob/master/A
 
   numeric. if a default is supplied, returns the maximum from the supplied values *and* the default.
   if a default is *not* supplied, returns `nil` if there are no values, otherwise the maximum from amongst the values.
+
+### provided "hud lines"
+
+* `status_effects.hud_line.numeric`
+
+  use this to display simple numeric values
+
+* `status_effects.hud_line.make_numeric(default, format, time_format)`
+
+  this will generate a custom numeric line formatter
+
+* `status_effects.hud_line.enabled_or_blocked`
+
+  use this to show whether an effect is enabled or blocked.
