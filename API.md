@@ -5,10 +5,6 @@ local S = minetest.get_translator()
 
 local my_effect = status_effects.register_effect("my_effect", {
     description = S("my effect"),
-    on_startup = function(self)
-        -- optional. can be used to initialize state when mods are loaded, but before players can join
-        self._my_state = {}
-    end,
 	fold = function(self, values_by_key)
         -- required. defines how to behave when an effect is coming from zero or more sources.
         -- if values_by_key is empty, should return the default state.
@@ -19,11 +15,32 @@ local my_effect = status_effects.register_effect("my_effect", {
         player:set_properties({my_value = value})
     end,
 
+    on_startup = function(self)
+        -- optional. can be used to initialize state when mods are loaded, but before players can join
+        self._my_state = {}
+    end,
+    on_shutdown = function(self)
+        -- optional. called when the server shuts down
+    end,
+    on_joinplayer = function(self, player, last_login)
+        -- optional. called when a player joins
+    end,
+    on_leaveplayer = function(self, player, timed_out)
+        -- optional. called when a player leaves the server
+    end,
+    on_die = function(self, player, reason)
+		self:clear(player)  -- you can supply something like this to clear an effect when a player dies
+	end,
+    on_respawnplayer = function(self, player)
+        -- optional. called when a player respawns
+    end,
     -- on_step stuff is optional
 	step_every = 1,  -- how often to call on_step, in seconds. if not specified, on_step will be called every step.
 	step_catchup = false,  -- whether or not to "catch up" when there's lag. this is useful for effects that do
                            -- something every second, e.g. poison.
-	on_step = function(self, player, value, elapsed, now) end,
+    on_step = function(self, player, value)
+        -- optional. will be called every server step or every `step_every` seconds
+    end,
 
 	hud_line = status_effects.hud_line.numeric, -- optional - if specified, what is shown when the effects hud is enabled.
 })
@@ -45,4 +62,8 @@ my_effect:add_timed(player, "another_key", false, 60) -- *disables* the effect f
 my_effect:remaining_time(player)  -- returns the time before the value will change, and current value
 my_effect:clear(player, "blahblah_key") -- clears the value of "blahblah_key". can also be used to clear timed keys.
 my_effect:clear(player) -- clears *all* keys, resetting to the default value
+
+my_effect:register_on_change(function(self, player, new_value, old_value)
+    -- called when the value of the effect changes.
+end)
 ```
