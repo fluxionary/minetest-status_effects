@@ -29,6 +29,24 @@ function status_effects.fold.sum(t, default)
 	return futil.math.isum(futil.iterators.values(t), default or 0)
 end
 
+function status_effects.fold.make_limited_sum(name, param1, param2)
+	local limiter = futil.create_limiter(name, param1, param2)
+	return function(t, default)
+		return limiter(status_effects.fold.sum(t, default))
+	end
+end
+
+function status_effects.fold.product(t, default)
+	return futil.math.iproduct(futil.iterators.values(t), default or 1)
+end
+
+function status_effects.fold.make_limited_product(name, param1, param2)
+	local limiter = futil.create_limiter(name, param1, param2)
+	return function(t, default)
+		return limiter(status_effects.fold.product(t, default))
+	end
+end
+
 function status_effects.fold.max(t, default)
 	local max = default
 	for _, value in pairs(t) do

@@ -87,10 +87,24 @@ for more info, see https://github.com/minetest-mods/player_monoids/blob/master/A
 
   numeric. if default is not supplied, will default to `0`. returns the sum of the values plus the default.
 
+* `status_effects.fold.product(values_by_key, default)`
+
+  numeric. if default is not supplied, will default to `1`. returns the product of the values times the default.
+
 * `status_effects.fold.max(values_by_key, default)`
 
   numeric. if a default is supplied, returns the maximum from the supplied values *and* the default.
   if a default is *not* supplied, returns `nil` if there are no values, otherwise the maximum from amongst the values.
+
+#### limited fold generators
+
+the following function will create fold methods which can scale the resulting value so that it grows less than linearly.
+
+* `status_effects.fold.make_limited_sum(name, param1, param2)`
+* `status_effects.fold.make_limited_product(name, param1, param2)`
+
+the name, param1, and param2 values are documented here:
+https://github.com/fluxionary/minetest-limit_physics_monoids/blob/main/README.md
 
 ### provided "hud lines"
 
